@@ -1,0 +1,11 @@
+#!/bin/bash
+if [ ! -e ~/.recipient ] ; then
+        printf "recipient key required\n"
+        printf "try \"gpg --export -o ~/.recipient <you@yourdomain>\"\n"
+        exit 1
+elif [ -z $1 ] ; then
+	printf "gpg-tar <file> or <directory>\n"
+	exit 1
+fi
+tar -cvh --exclude-vcs $1 | gpg -e -o $1.tar.pgp --set-filename "$1.tar" -F ~/.recipient
+printf "done\n"

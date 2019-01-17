@@ -1,0 +1,20 @@
+#!/bin/bash
+gethelp () {
+    printf "ungpg-tar <command> <file>\n"
+    printf "<command>\n"
+    printf "    t: list files in archive\n"
+    printf "    x: extract files from archive\n"
+}
+if [ -z $2 ] ; then
+    gethelp
+    exit 1
+fi
+case "$1" in
+    t ) 
+        gpg -d $2 | tar -t | less ;;
+    x )
+        gpg -d $2 | tar -x ;;
+    * )
+        gethelp
+        exit 1 ;;
+esac
