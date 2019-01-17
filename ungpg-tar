@@ -10,9 +10,9 @@ if [ -z $2 ] ; then
     exit 1
 fi
 case "$1" in
-    t ) 
+    [tl] ) 
         gpg -d $2 | tar -t | less ;;
-    x )
+    [ex] )
         gpg -d $2 | tar -x ;;
     * )
         gethelp
