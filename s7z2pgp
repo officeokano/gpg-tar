@@ -1,0 +1,26 @@
+#!/bin/bash
+files="*.7z"
+dirary=()
+function check () {
+	if ! $(printf "test" | gpg -ea -F ~/.recipient >/dev/null 2>&1 ); then
+		printf "gpg (-F supported) required\n"
+		exit 1
+	elif ! type s7zip >/dev/null 2>&1 ; then
+		printf "s7zip required\n"
+		exit 1
+	elif ! type gpg-tar >/dev/null 2>&1 ; then
+		printf "gpg-tar required\n"
+		exit 1
+	fi
+}
+function 7z2pgp () {
+	for filepath in $files ; do
+		dirary+=("$filepath")
+	done
+	for i in ${dirary[@]} ; do
+		j=${i%.*}
+		s7zip x $j.7z && gpg-tar c $j && rm -r $j && rm $j.7z
+	done
+}
+check
+ls *.7z >/dev/null && 7z2pgp

@@ -16,6 +16,10 @@ elif [ -z $2 ] ; then
 fi
 case "$1" in
     [cau] )
+        if ! $(printf "test" | gpg -ea -F ~/.recipient >/dev/null 2>&1 ); then
+	        printf "gpg (-F supported) required\n"
+	        exit 1
+        fi
         tar -cvh --exclude-vcs $2 | gpg -e -o $2.tar.pgp --set-filename "$2.tar" -F ~/.recipient ;;
     [tl] ) 
         gpg -d $2 | tar -t ;;
