@@ -6,21 +6,24 @@ gethelp () {
     printf "    t: list files in archive\n"
     printf "    x: extract files from archive\n"
 }
-if [ ! -e ~/.recipient ] ; then
-	printf "recipient key required\n"
-	printf "try \"gpg --export -o ~/.recipient <you@yourdomain>\"\n"
+if ! type gpg >/dev/null 2>&1 ; then
+    printf "gpg 2.1.14 or greater requried.\n"
+    exit 1
+elif [ ! -e ~/.recipient ] ; then
+    printf "recipient key required\n"
+    printf "try \"gpg --export -o ~/.recipient <you@yourdomain>\"\n"
     exit 1
 elif [ -z $2 ] ; then
-	gethelp
-	exit 1
+    gethelp
+    exit 1
 fi
 case "$1" in
     [cau] )
         if ! $(printf "test" | gpg -ea -F ~/.recipient >/dev/null 2>&1 ); then
-		printf "gpg 2.1.14 or greater required. The recipient will not be hidden.\n"
-		tar -ch --exclude-vcs $2 | gpg -e -o $2.tar.pgp --set-filename "$2.tar"
-	else
-        	tar -cvh --exclude-vcs $2 | gpg -e -o $2.tar.pgp --set-filename "$2.tar" -F ~/.recipient
+            printf "gpg 2.1.14 or greater required. The recipient will not be hidden.\n"
+            tar -ch --exclude-vcs $2 | gpg -e -o $2.tar.pgp --set-filename "$2.tar"
+        else
+            tar -cvh --exclude-vcs $2 | gpg -e -o $2.tar.pgp --set-filename "$2.tar" -F ~/.recipient
         fi ;;
     [tl] ) 
         gpg -d $2 | tar -t ;;
