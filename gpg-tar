@@ -17,7 +17,7 @@ fi
 case "$1" in
     [cau] )
         if ! $(printf "test" | gpg -ea -F ~/.recipient >/dev/null 2>&1 ); then
-		printf "gpg: -F is not supported. The recipient will not be hidden\n"
+		printf "gpg 2.1.14 or greater required. The recipient will not be hidden.\n"
 		tar -ch --exclude-vcs $2 | gpg -e -o $2.tar.pgp --set-filename "$2.tar"
 	else
         	tar -cvh --exclude-vcs $2 | gpg -e -o $2.tar.pgp --set-filename "$2.tar" -F ~/.recipient

@@ -3,7 +3,7 @@ files="*.7z"
 dirary=()
 function check () {
 	if ! $(printf "test" | gpg -ea -F ~/.recipient >/dev/null 2>&1 ); then
-		printf "gpg (-F supported) required\n"
+		printf "gpg 2.1.14 or greater required\n"
 		exit 1
 	elif ! type s7zip >/dev/null 2>&1 ; then
 		printf "s7zip required\n"
